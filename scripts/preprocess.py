@@ -5,7 +5,7 @@ import pandas as pd
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Path to the raw data directory
-data_dir = os.path.join(script_dir, '..', 'data', 'raw')
+raw_dir = os.path.join(script_dir, '..', 'data', 'raw')
 
 # List of CSV files to load
 csv_files = ['player_market_value.csv',
