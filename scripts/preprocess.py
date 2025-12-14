@@ -24,10 +24,32 @@ for file_name in csv_files:
     # Build the full path to the CSV file
     file_path = os.path.join(data_dir, folder, file_name)
 
-    # Read the CSV and store it in the dictionary
-    dataframes[file_name] = pd.read_csv(file_path)
+    if file_name == 'player_profiles.csv':
+        dataframes[file_name] = pd.read_csv(
+            file_path,
+            dtype={
+                'third_club_url': str,
+                'third_club_name': str,
+                'fourth_club_url': str,
+                'fourth_club_name': str,
+            }
+        )
+    else:
+        # Read the CSV and store it in the dictionary
+        dataframes[file_name] = pd.read_csv(file_path)
+
 
 # Print first five rows of each DataFrame to check the data
 for name, df in dataframes.items():
-    print(f"--- {name} ---")
+    print(f"\n--- {name} ---")
     print(df.head())
+
+for name, df, in dataframes.items():
+    print(f"\n--- {name} ---")
+
+    # Print numbr of rows
+    print("Rows:", df.shape[0])
+
+    # Column names
+    print("Columns:")
+    print(list(df.columns))
