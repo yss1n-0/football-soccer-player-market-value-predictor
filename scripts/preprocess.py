@@ -22,7 +22,7 @@ for file_name in csv_files:
     folder = file_name.replace(".csv", "")
 
     # Build the full path to the CSV file
-    file_path = os.path.join(data_dir, folder, file_name)
+    file_path = os.path.join(raw_dir, folder, file_name)
 
     if file_name == 'player_profiles.csv':
         dataframes[file_name] = pd.read_csv(
