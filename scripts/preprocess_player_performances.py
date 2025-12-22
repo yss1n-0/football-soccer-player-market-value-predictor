@@ -23,6 +23,12 @@ processed_dir = os.path.join(script_dir, '..', 'data', 'processed', 'player_perf
 chunksize = 100_000
 first_chunk = True # For writing header only once
 
+# columns = ['player_id', 'season_name', 'competition_id', 'competition_name',
+#            'team_id', 'team_name', 'nb_in_group', 'nb_on_pitch', 'goals',
+#            'assists', 'own_goals', 'subed_in', 'subed_out', 'yellow_cards',
+#            'second_yellow_cards', 'direct_red_cards', 'penalty_goals',
+#            'minutes_played', 'goals_conceded', 'clean_sheets']
+
 # Process the CSV file in chunks
 for chunk in pd.read_csv(raw_dir, chunksize=chunksize):
     # Drop rows with missing critical values
@@ -61,7 +67,6 @@ for chunk in pd.read_csv(raw_dir, chunksize=chunksize):
     # For all remaining chunks:
     else:
         # Append to the same CSV file
-        # Do not write the header again
-        chunk.to_csv(processed_dir, index=False, header=False)
+        chunk.to_csv(processed_dir, index=False)
 
 print("Saved player performances data")
