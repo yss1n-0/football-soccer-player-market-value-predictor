@@ -16,7 +16,7 @@ csv_files = ['player_market_value.csv',
 # Dictionary for DataFrames (key = file name, value = DataFrame)
 dataframes = {}
 
-# Loop through each CSV file
+# Loop through each CSV filedata
 for file_name in csv_files:
     # Folder name matches the CSV name
     folder = file_name.replace(".csv", "")
