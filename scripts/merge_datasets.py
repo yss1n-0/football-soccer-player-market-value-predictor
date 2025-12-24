@@ -54,7 +54,7 @@ df_master = pd.merge(
     )
 
 # Create a binary column for loan, 1 if player is on loan this season, otherwise 0
-df_master['on_loan'] = df_master['on_loan_from_club_id'].notna().astype(int)
+df_master['is_on_loan'] = df_master['on_loan_from_club_id'].notna().astype(int)
 
 # Fill club name for clarity
 df_master['on_loan_from_club_name'] = df_master['on_loan_from_club_name'].fillna('None')
