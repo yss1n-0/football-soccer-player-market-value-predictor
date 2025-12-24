@@ -51,6 +51,8 @@ cols_to_drop = [
     'citizenship',
     'name_in_home_country',
     'date_of_death',
+    'on_loan_from_club_id',
+    'on_loan_from_club_name',
 ]
 df_master = df_master.drop(columns=[c for c in cols_to_drop if c in df_master.columns])
 
