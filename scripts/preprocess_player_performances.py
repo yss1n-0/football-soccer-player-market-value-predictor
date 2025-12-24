@@ -49,9 +49,6 @@ for chunk in pd.read_csv(raw_dir, chunksize=chunksize):
     # Drop rows with invalid or missing season years
     chunk = chunk.dropna(subset=['season_start_year'])
 
-    # Drop the helper column
-    chunk = chunk.drop(columns=['season_start_year'])
-
     # For the first chunk only
     if first_chunk:
         # Basic inspection
