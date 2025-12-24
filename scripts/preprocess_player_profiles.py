@@ -39,8 +39,6 @@ cols_to_drop = [
     'player_agent_name',
     'contract_option',
     'date_of_last_contract_extension',
-    'on_loan_from_club_id',
-    'on_loan_from_club_name',
     'contract_there_expires',
     'second_club_url',
     'second_club_name',
