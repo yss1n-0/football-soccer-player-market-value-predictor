@@ -53,6 +53,12 @@ df_master = pd.merge(
     how='left'
     )
 
+# Create a binary column for loan, 1 if player is on loan this season, otherwise 0
+df_master['on_loan'] = df_master['on_loan_from_club_id'].notna().astype(int)
+
+# Fill club name for clarity
+df_master['on_loan_from_club_name'] = df_master['on_loan_from_club_name'].fillna('None')
+
 # Sort
 df_master = df_master.sort_values(by=['player_id', 'season_start_year'])
 
