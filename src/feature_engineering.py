@@ -15,54 +15,32 @@ output_path = os.path.join(script_dir, '..', 'data', 'processed', 'features_data
 
 # Load DataFrame
 df = pd.read_csv(file_path)
+df = df.sort_values(['player_id', 'season_start_year'])
 
 # Get goal contributions
 df['goal_contributions'] = df['goals'] + df['assists']
 
-# Total career goals for a player
-# Gives the model context about the player's scoring history
+# Career stats
 df['career_goals'] = df.groupby('player_id')['goals'].cumsum()
-
-# Total assists for a player
 df['career_assists'] = df.groupby('player_id')['assists'].cumsum()
-
-# Total goal contributions for a player
 df['career_goals_contrib'] =  df['career_goals'] + df['assists']
-
-# Total clean sheets (relevant for GKs)
 df['career_clean_sheets'] = df.groupby('player_id')['clean_sheets'].cumsum()
-
-# Total goals conceded (relevant for GKs)
 df['career_goals_conceded'] = df.groupby('player_id')['goals_conceded'].cumsum()
 
-# Average goals per season
+# Averages
 df['avg_goals_per_season'] = df.groupby('player_id')['goals'].transform('mean')
-
-# Average assists per season
 df['avg_assists_per_season'] = df.groupby('player_id')['assists'].transform('mean')
-
-# Average goal contributions per season
 df['avg_goals_contrib_per_season'] = df.groupby('player_id')['goal_contributions'].transform('mean')
-
-# Average clean sheets per season
 df['avg_clean_sheets_per_season'] = df.groupby('player_id')['clean_sheets'].transform('mean')
-
-# Average goals conceded per season
 df['avg_goals_conceded_per_season'] = df.groupby('player_id')['goals_conceded'].transform('mean')
 
 # Avoid division by zero by replacing 0 minutes with NaN, then fill NaN with 0
 minutes = df['minutes_played'].replace(0, pd.NA)
 
-# Goals per 90 minutes
+# Per 90 metrics
 df['goals_per_90'] = (df['goals'] / (minutes / 90)).fillna(0)
-
-# Assists per 90 minutes
 df['assists_per_90'] = (df['assists'] / (minutes / 90)).fillna(0)
-
-# Goal contributions per 90 minutes
 df['goals_contrib_per_90'] = (df['goal_contributions'] / (minutes / 90)).fillna(0)
-
-# Goals conceded per 90 minutes
 df['goals_conceded_per_90'] = (df['goals_conceded'] / (minutes / 90)).fillna(0)
 
 # Clean sheet rate
@@ -97,6 +75,28 @@ df['goal_contrib_vs_pos_avg'] = df['goal_contributions'] / df.groupby(['main_pos
 df[['goals_vs_pos_avg', 'assists_vs_pos_avg', 'goal_contrib_vs_pos_avg']] = \
     df[['goals_vs_pos_avg', 'assists_vs_pos_avg', 'goal_contrib_vs_pos_avg']].replace([float('inf'), -float('inf')], 0).fillna(0)
 
+# Recent form
+df['last_5_goals'] = df.groupby('player_id')['goals'].rolling(5, min_periods=1).sum().reset_index(0, drop=True)
+df['last_5_assists'] = df.groupby('player_id')['assists'].rolling(5, min_periods=1).sum().reset_index(0, drop=True)
+df['last_5_goals_contrib'] = df['last_5_goals'] + df['last_5_assists']
+
+# Performance vs last season
+df['goals_change_vs_last_season'] = df['goals'] - df.groupby('player_id')['goals'].shift(1)
+df['assists_change_vs_last_season'] = df['assists'] - df.groupby('player_id')['goals'].shift(1)
+df[['goals_change_vs_last_season', 'assists_change_vs_last_season']] = \
+    df[['goals_change_vs_last_season', 'assists_change_vs_last_season']].fillna(0)
+
+# Average teammate value
+df['team_avg_value'] = df.groupby(['team_id', 'season_start_year'])['value'].transform('mean')
+
+# Age bins
+df['age_group'] = pd.cut(df['age'], bins=[15, 18, 21, 24, 28, 32, 40], labels=False)
+
+# Hot transfer candidate
+df['hot_transfer_candidate'] = ((df['contract_remaining_years'] <= 1) &
+                                (df['age'] < 25) &
+                                (df['avg_goals_contrib_per_season'] > 5)).astype(int)
+
 # Numeric features to scale
 numeric_features = [
     'age',
@@ -126,6 +126,12 @@ numeric_features = [
     'goal_contrib_vs_pos_avg',
     'career_goals_conceded',
     'career_clean_sheets',
+    'last_5_goals',
+    'last_5_assists',
+    'last_5_goals_contrib',
+    'goals_change_vs_last_season',
+    'assists_change_vs_last_season',
+    'team_avg_value'
 ]
 
 # Fill missing numeric values with 0 before scaling
@@ -135,7 +141,7 @@ df[numeric_features] = df[numeric_features].fillna(0)
 df[numeric_features] = scaler.fit_transform(df[numeric_features])
 
 # Encode main position and position
-df = pd.get_dummies(df, columns=['position', 'main_position'], sparse=True)
+df = pd.get_dummies(df, columns=['position', 'main_position', 'age_group'], sparse=True)
 
 # Save the feature-engineered dataset
 df.to_csv(output_path, index=False)
