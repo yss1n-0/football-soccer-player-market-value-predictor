@@ -57,7 +57,7 @@ cols_to_drop = [
 df_master = df_master.drop(columns=[c for c in cols_to_drop if c in df_master.columns])
 
 # Encode categorical columns
-df_master = pd.get_dummies(df_master, columns=['position', 'main_position', 'foot', 'is_eu'], sparse=True)
+df_master = pd.get_dummies(df_master, columns=['foot', 'is_eu'], sparse=True)
 
 # Save model-ready dataset
 df_master.to_csv(output_path, index=False)
