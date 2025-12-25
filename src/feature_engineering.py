@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import numpy as np
 from sklearn.preprocessing import StandardScaler
 
 scaler = StandardScaler()
@@ -97,6 +98,21 @@ df['hot_transfer_candidate'] = ((df['contract_remaining_years'] <= 1) &
                                 (df['age'] < 25) &
                                 (df['avg_goals_contrib_per_season'] > 5)).astype(int)
 
+# Trusted-weighted performance
+df['trusted_goals_contrib'] = (
+    df['goals_contrib_per_90'] * np.log1p(df['minutes_played'])
+)
+
+# Prime-age performance
+df['prime_age_factor'] = 1 - (abs(df['age'] - 26) / 10)
+df['prime_age_factor'] = df['prime_age_factor'].clip(lower=0)
+
+# Contract pressure performance
+df['contract_pressure_score'] = (
+    df['goals_contrib_per_90'] /
+    (1 + df['contract_remaining_years'])
+)
+
 # Numeric features to scale
 numeric_features = [
     'age',
@@ -131,7 +147,10 @@ numeric_features = [
     'last_5_goals_contrib',
     'goals_change_vs_last_season',
     'assists_change_vs_last_season',
-    'team_avg_value'
+    'team_avg_value',
+    'trusted_goals_contrib',
+    'prime_age_factor',
+    'contract_pressure_score',
 ]
 
 # Fill missing numeric values with 0 before scaling
