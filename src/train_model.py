@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import numpy as np
 import lightgbm as lgb
+import joblib
 
 from sklearn.model_selection import RandomizedSearchCV, TimeSeriesSplit
 from sklearn.metrics import mean_absolute_error, r2_score
@@ -11,6 +12,9 @@ from sklearn.inspection import permutation_importance
 
 # Path to the current directory this script is in
 script_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Path to models directory for saving models
+models_dir = os.path.join(script_dir, '..', 'models')
 
 # Path to the features dataset
 file_path = os.path.join(script_dir, '..', 'data', 'processed', 'features_dataset.csv')
@@ -185,6 +189,12 @@ baseline_pred = np.full(shape=len(y_test), fill_value=np.expm1(y_train.mean()))
 baseline_mae = mean_absolute_error(np.expm1(y_test), baseline_pred)
 print(f"\nBaseline MAE (mean prediction): €{baseline_mae:,.0f}")
 print(f"MAE improvement: €{baseline_mae - mae:,.0f}")
+
+# Save model(s)
+
+model_path = os.path.join(models_dir, 'lgb_market_value_model.pkl')
+joblib.dump(best_lgb, model_path)
+print("\nSaved lgb model")
 
 # Feature importance
 best_model = best_lgb if mae < mae_hgb else best_hgb

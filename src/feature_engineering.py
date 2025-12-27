@@ -131,7 +131,7 @@ df[['goals_change_vs_last_season', 'assists_change_vs_last_season']] = \
     df[['goals_change_vs_last_season', 'assists_change_vs_last_season']].fillna(0)
 
 # Average teammate value
-df['team_avg_value'] = df.groupby(['team_id', 'season_start_year'])['value'].transform('mean')
+df['team_avg_value'] = df.groupby(['team_id', 'season_start_year'])['value'].transform('mean').shift(1)
 
 # Age bins
 df['age_group'] = pd.cut(df['age'], bins=[15, 18, 21, 24, 28, 32, 40], labels=False)
