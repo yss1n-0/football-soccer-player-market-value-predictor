@@ -33,10 +33,12 @@ df_master['contract_remaining_years'] = (
 # Remove negative values (expired contracts before the season)
 df_master['contract_remaining_years'] = df_master['contract_remaining_years'].clip(lower=0)
 
+# Convert date_unix to datetime
+df_master['date_unix'] = pd.to_datetime(df_master['date_unix'], errors='coerce')
+
 # Handle date columns for features like player age in a season
 df_master['date_of_birth'] = pd.to_datetime(df_master['date_of_birth'], errors='coerce')
-df_master['age'] = df_master['season_start_year'] - df_master['date_of_birth'].dt.year
-
+df_master['age'] = (df_master['date_unix'] - df_master['date_of_birth']).dt.days / 365.25
 
 # Drop columns that leak info, aren't useable, or extremely sparse
 cols_to_drop = [

@@ -19,7 +19,7 @@ models_dir = os.path.join(script_dir, '..', 'models')
 # Path to the features dataset
 file_path = os.path.join(script_dir, '..', 'data', 'processed', 'features_dataset.csv')
 
-# Load DataFrame
+# Load DataFrames
 df = pd.read_csv(file_path)
 
 # Target variable
@@ -33,6 +33,7 @@ cols_to_drop = [
     'value',
     'player_id',
     'team_id',
+    'date_unix',
     'season_name',
     'season_start_year',
     'competition_id',
@@ -72,6 +73,14 @@ X_train = X_train.drop(columns=low_variance_cols)
 X_test = X_test.drop(columns=low_variance_cols)
 print(f"Dropped {len(low_variance_cols)} low-variance columns")
 print(f"Train samples: {len(X_train)}, Test samples: {len(X_test)}")
+
+# Save feature list for later
+feature_list_path = os.path.join(models_dir, 'features.txt')
+with open(feature_list_path, 'w') as f:
+    for col in X_train.columns:
+        f.write(col + '\n')
+print(f"Saved training feature list ({len(X_train.columns)} columns) to {feature_list_path}")
+
 
 numeric_features = [
     # Age / experience
@@ -131,7 +140,7 @@ search_lgb = RandomizedSearchCV(
     scoring='neg_mean_absolute_error',
     cv=tscv,
     n_jobs=-1,
-    verbose=1,  # keep progress but not debug
+    verbose=1,
     random_state=42
 )
 search_lgb.fit(X_train, y_train)

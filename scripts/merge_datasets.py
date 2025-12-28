@@ -40,7 +40,7 @@ df_market['season_start_year'] = df_market['date_unix'].dt.year
 # Merge performances with market values
 df_master = pd.merge(
     df_perf,
-    df_market[['player_id','season_start_year','value']], 
+    df_market[['player_id','season_start_year','value', 'date_unix']], 
     on=['player_id','season_start_year'],
     how='left'
     )
