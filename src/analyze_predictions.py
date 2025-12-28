@@ -2,15 +2,6 @@ import os
 import pandas as pd
 import numpy as np
 
-# Round predicted values like Transfermarkt
-def round_market_value(val):
-    if val < 1_000_000:
-        return round(val, -3)
-    elif val < 10_000_000:
-        return round(val, -5)
-    else:
-        return round(val, -6)
-
 # Paths
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -24,9 +15,9 @@ predictions_path = os.path.join(
 output_all_path = os.path.join(
     script_dir, '..', 'data', 'processed', 'predictions_with_errors.csv'
 )
-output_targets_path = os.path.join(
-    script_dir, '..', 'data', 'processed', 'top_transfer_targets.csv'
-)
+# output_targets_path = os.path.join(
+#     script_dir, '..', 'data', 'processed', 'top_transfer_targets.csv'
+# )
 
 # Turn off scientific notation and force commas
 pd.options.display.float_format = '{:,.0f}'.format
@@ -58,44 +49,44 @@ df['error_pct'] = df['prediction_error'] / df['value']
 df.to_csv(output_all_path, index=False)
 
 
-targets = df[
-    (df['prediction_error'] > 1_000_000) &      # undervalued by €1m+
-    (df['age'] <= 25) &                         # young players
-    (df['minutes_played'] > 900) &              # actually plays
-    (df['contract_remaining_years'] <= 2)       # realistic transfers
-]
+# targets = df[
+#     (df['prediction_error'] > 1_000_000) &      # undervalued by €1m+
+#     (df['age'] <= 25) &                         # young players
+#     (df['minutes_played'] > 900) &              # actually plays
+#     (df['contract_remaining_years'] <= 2)       # realistic transfers
+# ]
 
-targets = targets.sort_values(
-    by='prediction_error',
-    ascending=False
-)
+# targets = targets.sort_values(
+#     by='prediction_error',
+#     ascending=False
+# )
 
-# Keep useful columns only
-target_cols = [
-    'player_id',
-    'season_name'
-    'season_start_year',
-    'date_unix'
-    'age',
-    'main_position_Attack',
-    'main_position_Midfield',
-    'main_position_Defender',
-    'main_position_Goalkeeper',
-    'minutes_played',
-    'contract_remaining_years',
-    'value',
-    'predicted_value',
-    'prediction_error',
-    'error_pct',
-]
+# # Keep useful columns only
+# target_cols = [
+#     'player_id',
+#     'season_name',
+#     'season_start_year',
+#     'date_unix',
+#     'age',
+#     'main_position_Attack',
+#     'main_position_Midfield',
+#     'main_position_Defender',
+#     'main_position_Goalkeeper',
+#     'minutes_played',
+#     'contract_remaining_years',
+#     'value',
+#     'predicted_value',
+#     'prediction_error',
+#     'error_pct',
+# ]
 
-target_cols = [c for c in target_cols if c in targets.columns]
+# target_cols = [c for c in target_cols if c in targets.columns]
 
-targets[target_cols].to_csv(output_targets_path, index=False)
+# targets[target_cols].to_csv(output_targets_path, index=False)
 
 
 print("Analysis complete\n")
 
 print("\nSaved files:")
 print(output_all_path)
-print(output_targets_path)
+# print(output_targets_path)
