@@ -11,11 +11,11 @@ df = df[(df['value'] > 0) & (df['predicted_value'] > 0)]
 
 # Actual vs Predicted (log)
 
-# 1️. Actual vs Predicted Player Market Value (Log Scale)
+# 1. Actual vs Predicted Player Market Value (Log Scale)
 # This scatter plot shows each player's actual market value on the x-axis and the model's predicted value on the y-axis.
-# Both axes are logarithmic to clearly show errors across low- and high-value players.
-# Points near the red dashed line indicate accurate predictions, while points above or below the line show over- or underestimation.
-# This helps visualize overall model fit and detect systematic biases across player values.
+# Both axes are logarithmic to show errors across low- and high-value players.
+# Points near or on the red line means an accurate prediction, while points above are an overestimations, and lines below are an underestimation
+# The graph helps visualize how accurate the model is in predicting values, or simply put, overall model fit
 
 plt.figure(figsize=(8, 8))
 
@@ -46,9 +46,9 @@ plt.show()
 
 # 2. Prediction Error vs Actual Market Value
 # This scatter plot shows the absolute prediction error (in euros) on the y-axis versus the actual market value on the x-axis.
-# The horizontal red line at zero represents perfect prediction.
-# Points above the line indicate overestimation, points below indicate underestimation.
+# The red line at 0 means a perfect predictions, above is an overestimtion, below is an underestimation
 # This plot highlights where the model tends to perform better or worse depending on the player’s value.
+# The model tends to mess up more with higher value players
 
 plt.figure(figsize=(8, 6))
 
@@ -76,7 +76,7 @@ plt.show()
 
 # 3. Distribution of Prediction Errors (Absolute €)
 # Histogram of prediction errors in euros, showing the frequency of different error magnitudes.
-# The vertical red line at zero indicates perfect predictions.
+# The red line is a reference to perfection.
 # Most errors cluster near zero, representing typical model accuracy, while the tails reveal extreme over- or underestimations.
 # This plot helps quantify the typical scale of errors and detect large outliers.
 
@@ -103,10 +103,8 @@ plt.show()
 # Error Distribution Percent - Full Range (includes outliers)
 
 # 4. Distribution of Prediction Errors (%) – Full Range (Including Outliers)
-# Histogram of prediction errors expressed as percentages, including extreme outliers.
-# The red vertical line at zero represents perfect predictions.
-# Most players’ errors are close to 0%, but rare extreme values (e.g., 135%) appear as outliers.
-# This gives a relative view of model accuracy across all players and highlights the spread and symmetry of errors.
+# Histogram of prediction errors as percentages, including extreme outliers.
+# The red line at 0, again is a reference to perfection
 
 plt.figure(figsize=(8, 6))
 
@@ -135,10 +133,9 @@ plt.show()
 # Error Distribution Percent - Main Distribution (±5%)
 
 # 5. Distribution of Prediction Errors (%) – Main Distribution (±5%)
-# Histogram of prediction errors in percentages focusing on the main ±5% range.
-# The vertical red line at zero is the reference for perfect prediction.
-# This zoomed-in view shows the bulk of the data without being distorted by extreme outliers.
-# It clearly shows typical prediction performance and allows easy comparison of over- vs underestimation for most players.
+# Histogram of prediction errors as percentages focusing on the main -+5% range
+# The red line at 0, again is a reference to perfection
+# This graphs helps visualize data more clearly without the outliers
 
 plt.figure(figsize=(8, 6))
 
