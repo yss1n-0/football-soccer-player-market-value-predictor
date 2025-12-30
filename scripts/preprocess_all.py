@@ -15,4 +15,4 @@ for step, script in enumerate(scripts, start=1):
     print(f"Step {step}/{total_steps}: Running {script} ...")
     os.system(f"python {script}")
 
-print("Done preprocessing raw datasets. Next step: Make features dataset.")
+print("Done preprocessing and merging raw datasets. Next step: Make features dataset.")
