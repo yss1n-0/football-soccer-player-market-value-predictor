@@ -65,26 +65,26 @@ df['assists_per_90_last_season'] = df.groupby('player_id')['assists_per_90_seaso
 df['goals_contrib_per_90_last_season'] = df.groupby('player_id')['goals_contrib_per_90_season'].shift(1).fillna(0)
 df['minutes_last_season'] = df.groupby('player_id')['minutes_played'].shift(1).fillna(0)
 
-# ---------- rolling last 3 seasons (exclude current season) ----------
+# last 3 seasons (exclude current season)
 df['goals_per_90_last3_avg'] = df.groupby('player_id')['goals_per_90_season'].transform(lambda x: x.shift(1).rolling(window=3, min_periods=1).mean()).fillna(0)
 df['assists_per_90_last3_avg'] = df.groupby('player_id')['assists_per_90_season'].transform(lambda x: x.shift(1).rolling(window=3, min_periods=1).mean()).fillna(0)
 df['goals_contrib_per_90_last3_avg'] = df.groupby('player_id')['goals_contrib_per_90_season'].transform(lambda x: x.shift(1).rolling(window=3, min_periods=1).mean()).fillna(0)
 df['minutes_last3_avg'] = df.groupby('player_id')['minutes_played'].transform(lambda x: x.shift(1).rolling(window=3, min_periods=1).mean()).fillna(0)
 
-# ---------- competition / league level aggregation ----------
-# competition_id column exists — compute competition-season avg/median value (shifted so we don't leak)
+# competition / league level aggregation
+# competition_id column exists - compute competition-season avg/median value (shifted so we don't leak)
 df['competition_prev_avg_value'] = df.groupby('competition_id')['value'].transform(lambda x: x.shift(1).expanding().mean()).fillna(0)
 
 # Also create competition historical median up to previous season to avoid leakage:
 df['competition_prev_median_value'] = df.groupby('competition_id')['value'].transform(lambda x: x.shift(1).expanding().median()).fillna(0)
 
-# ---------- player peak/previous max value ----------
+# - player peak/previous max value
 df['max_value_prev_seasons'] = df.groupby('player_id')['value'].transform(lambda x: x.shift(1).cummax()).fillna(0)
 
-# ---------- season-level trend feature ----------
+# season-level trend feature 
 df['season_year_offset'] = df['season_start_year'] - df['season_start_year'].min()
 
-# ---------- remove temporary minutes_nonzero before saving ----------
+# remove temporary minutes_nonzero before saving 
 df.drop(columns=['minutes_nonzero'], inplace=True)
 
 # Clean sheet rate
