@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-# Matplotlib documentations assisted heavily with the logic
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 
