@@ -59,8 +59,6 @@ cols_to_drop = [
     'team_avg_value',
 ]
 
-# Model logic assisted by GitHub Copilot
-
 X = df.drop(columns=[c for c in cols_to_drop if c in df.columns])
 
 # Reindex to match training features
