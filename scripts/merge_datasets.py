@@ -38,7 +38,6 @@ df_market['date_unix'] = pd.to_datetime(df_market['date_unix'], errors='coerce')
 df_market['season_start_year'] = df_market['date_unix'].dt.year
 
 # Merge performances with market values
-# Logic assisted by GitHub Copilot
 df_master = pd.merge(
     df_perf,
     df_market[['player_id','season_start_year','value', 'date_unix']], 
