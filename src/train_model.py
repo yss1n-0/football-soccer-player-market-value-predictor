@@ -1,8 +1,6 @@
 import os
 import pandas as pd
 import numpy as np
-
-# Lightgbm, Joblib, and Scikit learn documentations assisted with logic
 import lightgbm as lgb
 import joblib
 
@@ -56,8 +54,6 @@ cols_to_drop = [
     'foot_Unknown',
     'team_avg_value',
 ]
-
-# Model logic assisted heavily by GitHub Copilot
 
 X = df.drop(columns=[c for c in cols_to_drop if c in df.columns])
 y = df[TARGET]
