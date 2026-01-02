@@ -34,7 +34,7 @@ The features have been split into **two main categories**:
 - Contract length, contract remaining ratio, contract pressure score
 
 ## Dataset
-**Source:** Public Kaggle dataset compiled by salimt using Transfermarkt data (CC0 1.0).
+**Source:** Public Kaggle dataset compiled using Transfermarkt data (CC0 1.0).
 
 **Overview:**  
 - 90,000+ players worldwide
